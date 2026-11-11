@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Smart Wealth & Budget Planner</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+body{font-family:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',sans-serif}
+.buy-btn{background:linear-gradient(135deg,#7c3aed,#4f46e5,#2563eb);background-size:200% 200%;animation:shift 5s ease infinite,glowP 2.4s ease-in-out infinite;transition:transform .2s}
+.buy-btn-lemon{background:linear-gradient(135deg,#f59e0b,#f97316,#ea580c);background-size:200% 200%;animation:shift 5s ease infinite,glowY 2.4s ease-in-out infinite;transition:transform .2s;text-shadow:0 1px 2px rgba(0,0,0,.25)}
+.buy-btn:hover,.buy-btn-lemon:hover{transform:translateY(-2px) scale(1.03)}
+@keyframes shift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+@keyframes glowP{0%,100%{box-shadow:0 0 14px rgba(124,58,237,.55),0 0 32px rgba(37,99,235,.35)}50%{box-shadow:0 0 24px rgba(124,58,237,.85),0 0 54px rgba(37,99,235,.6)}}
+@keyframes glowY{0%,100%{box-shadow:0 0 14px rgba(245,158,11,.55),0 0 32px rgba(249,115,22,.35)}50%{box-shadow:0 0 24px rgba(245,158,11,.85),0 0 54px rgba(249,115,22,.6)}}
+.pick{appearance:none;-webkit-appearance:none;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center;cursor:pointer}
+.seg{transition:width .5s ease}
+@media (prefers-reduced-motion:reduce){.buy-btn,.buy-btn-lemon{animation:none}.seg{transition:none}}
+</style>
+</head>
+<body class="min-h-screen bg-gradient-to-b from-slate-100 to-indigo-50 text-slate-800">
+
+<div dir="ltr" class="flex w-full justify-end gap-2 px-4 pt-4">
+  <label class="flex items-center gap-1.5"><span aria-hidden="true">🌐</span>
+    <select id="langSel" class="pick rounded-full border border-slate-200 py-2 pl-4 pr-9 text-sm font-semibold shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+      <option value="en">English</option><option value="tr">Türkçe</option><option value="es">Español</option>
+      <option value="de">Deutsch</option><option value="fr">Français</option><option value="ar">العربية</option>
+      <option value="ru">Русский</option><option value="zh">中文</option><option value="ja">日本語</option>
+      <option value="pt">Português</option><option value="it">Italiano</option><option value="hi">हिन्दी</option>
+      <option value="ko">한국어</option><option value="nl">Nederlands</option><option value="pl">Polski</option>
+    </select>
+  </label>
+  <label class="flex items-center gap-1.5"><span aria-hidden="true">💱</span>
+    <select id="curSel" class="pick rounded-full border border-slate-200 py-2 pl-4 pr-9 text-sm font-semibold shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"></select>
+  </label>
+</div>
+
+<div class="flex w-full flex-wrap items-center justify-center gap-4 px-4 pt-5">
+  <a href="https://gumroad.com" target="_blank" rel="noopener noreferrer" class="buy-btn inline-block rounded-full px-8 py-4 text-center text-base font-extrabold text-white sm:text-lg">🚀 Buy via Gumroad ($2)</a>
+  <a href="https://lemonsqueezy.com" target="_blank" rel="noopener noreferrer" class="buy-btn-lemon inline-block rounded-full px-8 py-4 text-center text-base font-extrabold text-white sm:text-lg">🍋 Buy via Lemon Squeezy ($2)</a>
+</div>
+
+<main class="mx-auto max-w-3xl px-4 py-10">
+  <h1 data-t="0" class="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl"></h1>
+  <p data-t="1" class="mt-2 text-slate-500"></p>
+
+  <section class="mt-8 grid gap-4 rounded-3xl bg-white p-5 shadow-sm sm:grid-cols-2">
+    <div>
+      <label data-t="2" for="inc" class="text-sm font-semibold"></label>
+      <div class="mt-2 flex items-center overflow-hidden rounded-2xl border border-slate-200 focus-within:ring-2 focus-within:ring-indigo-500">
+        <span class="cs bg-slate-50 px-4 py-3 font-bold text-slate-500"></span>
+        <input id="inc" type="number" min="0" step="any" inputmode="decimal" placeholder="0" class="w-full min-w-0 px-3 py-3 text-lg font-bold focus:outline-none">
+      </div>
+    </div>
+    <div>
+      <label data-t="3" for="fix" class="text-sm font-semibold"></label>
+      <div class="mt-2 flex items-center overflow-hidden rounded-2xl border border-slate-200 focus-within:ring-2 focus-within:ring-indigo-500">
+        <span class="cs bg-slate-50 px-4 py-3 font-bold text-slate-500"></span>
+        <input id="fix" type="number" min="0" step="any" inputmode="decimal" placeholder="0" class="w-full min-w-0 px-3 py-3 text-lg font-bold focus:outline-none">
+      </div>
+      <p data-t="4" class="mt-1 text-xs text-slate-400"></p>
+    </div>
+  </section>
+  <p id="warn" data-t="14" class="mt-3 hidden rounded-xl bg-red-50 px-4 py-3 text-sm font-semibold text-red-600"></p>
+
+  <section class="mt-6 rounded-3xl bg-gradient-to-br from-slate-900 via-indigo-950 to-violet-900 p-6 text-white shadow-xl">
+    <p data-t="5" class="text-indigo-200"></p>
+    <p id="left" class="mt-1 text-4xl font-extrabold tracking-tight sm:text-5xl">—</p>
+    <div id="stack" class="mt-5 flex h-4 w-full overflow-hidden rounded-full bg-white/10" dir="ltr"></div>
+    <div id="legend" class="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs text-indigo-100"></div>
+  </section>
+
+  <div class="mt-8 flex items-center justify-between gap-3">
+    <h2 data-t="6" class="text-xl font-extrabold"></h2>
+    <div class="flex gap-2">
+      <button id="custBtn" aria-expanded="false" class="rounded-full bg-white px-4 py-2 text-sm font-semibold shadow-sm transition hover:scale-105">⚙️ <span data-t="12"></span></button>
+      <button id="resetBtn" class="rounded-full bg-white px-4 py-2 text-sm font-semibold shadow-sm transition hover:scale-105">↺ <span data-t="13"></span></button>
+    </div>
+  </div>
+  <div id="rows" class="mt-4 space-y-3"></div>
+  <p data-t="16" class="mt-8 text-center text-xs text-slate-400"></p>
+</main>
+
+<script>
+const $ = id => document.getElementById(id);
+const KEY = 'smartWealthPlanner_v1';
+// Dizi sırası: başlık, alt başlık, gelir, sabit, ipucu, kalan, plan, 5 kategori, özelleştir, sıfırla, uyarı, sabit giderler, not, dil, para birimi
+const T = {
+en:['Smart Wealth & Budget Planner','Enter your income and let smart rules split your money — then tune it your way.','Monthly net income','Fixed debt / tax / bills','Obligations you must pay every month','Left to allocate','Your smart plan','Needs & Bills','Debt & Tax Shield','Emergency Fund','Investing & Savings','Personal Spending','Customize your split','Reset','Fixed costs are higher than your income. Review your numbers.','Fixed costs','For guidance only, not financial advice.','Language','Currency'],
+tr:['Akıllı Varlık ve Bütçe Planlayıcı','Gelirini gir, akıllı kurallar paranı bölsün; sonra kendine göre ayarla.','Aylık net gelir','Sabit borç / vergi / faturalar','Her ay ödemen gereken yükümlülükler','Dağıtılacak tutar','Akıllı planın','İhtiyaçlar ve Faturalar','Borç ve Vergi Kalkanı','Acil Durum Fonu','Yatırım ve Tasarruf','Kişisel Harcama','Dağılımı özelleştir','Sıfırla','Sabit giderler gelirinden yüksek. Rakamları gözden geçir.','Sabit giderler','Yalnızca yol göstericidir, finansal tavsiye değildir.','Dil','Para birimi'],
+es:['Planificador Inteligente de Patrimonio y Presupuesto','Introduce tus ingresos y deja que reglas inteligentes repartan tu dinero; luego ajústalo a tu gusto.','Ingresos netos mensuales','Deudas / impuestos / facturas fijos','Obligaciones que debes pagar cada mes','Disponible para repartir','Tu plan inteligente','Necesidades y facturas','Escudo de deuda e impuestos','Fondo de emergencia','Inversión y ahorro','Gastos personales','Personaliza tu reparto','Restablecer','Los gastos fijos superan tus ingresos. Revisa tus cifras.','Gastos fijos','Solo orientativo, no es asesoramiento financiero.','Idioma','Moneda'],
+de:['Smarter Vermögens- und Budgetplaner','Gib dein Einkommen ein, kluge Regeln verteilen dein Geld – dann passe es an.','Monatliches Nettoeinkommen','Feste Schulden / Steuern / Rechnungen','Pflichtausgaben, die jeden Monat anfallen','Zu verteilen','Dein smarter Plan','Bedarf & Rechnungen','Schulden- & Steuerschutz','Notfallfonds','Investieren & Sparen','Persönliche Ausgaben','Verteilung anpassen','Zurücksetzen','Die Fixkosten übersteigen dein Einkommen. Prüfe deine Zahlen.','Fixkosten','Nur zur Orientierung, keine Finanzberatung.','Sprache','Währung'],
+fr:['Planificateur intelligent de patrimoine et de budget','Saisissez vos revenus, des règles intelligentes répartissent votre argent, puis ajustez à votre façon.','Revenu net mensuel','Dettes / impôts / factures fixes','Obligations à payer chaque mois','Reste à répartir','Votre plan intelligent','Besoins et factures','Bouclier dettes et impôts','Fonds d\'urgence','Investissement et épargne','Dépenses personnelles','Personnalisez la répartition','Réinitialiser','Les charges fixes dépassent vos revenus. Vérifiez vos chiffres.','Charges fixes','À titre indicatif, pas un conseil financier.','Langue','Devise'],
+ar:['مخطط الثروة والميزانية الذكي','أدخل دخلك ودع القواعد الذكية توزع أموالك، ثم عدّلها كما تشاء.','صافي الدخل الشهري','الديون / الضرائب / الفواتير الثابتة','التزامات يجب دفعها كل شهر','المتبقي للتوزيع','خطتك الذكية','الاحتياجات والفواتير','درع الديون والضرائب','صندوق الطوارئ','الاستثمار والادخار','الإنفاق الشخصي','خصص التوزيع','إعادة ضبط','التكاليف الثابتة أعلى من دخلك. راجع أرقامك.','التكاليف الثابتة','للإرشاد فقط وليس نصيحة مالية.','اللغة','العملة'],
+ru:['Умный планировщик капитала и бюджета','Введите доход, умные правила распределят деньги, затем настройте под себя.','Чистый доход в месяц','Постоянные долги / налоги / счета','Обязательные ежемесячные платежи','Осталось распределить','Ваш умный план','Нужды и счета','Защита от долгов и налогов','Резервный фонд','Инвестиции и сбережения','Личные расходы','Настроить распределение','Сбросить','Постоянные расходы превышают доход. Проверьте данные.','Постоянные расходы','Только для ориентира, не финансовая рекомендация.','Язык','Валюта'],
+zh:['智能财富与预算规划器','输入收入，智能规则自动分配资金，再按你的方式调整。','每月净收入','固定债务 / 税费 / 账单','每月必须支付的固定支出','可分配金额','你的智能方案','必需开支与账单','债务与税务保障','应急基金','投资与储蓄','个人消费','自定义分配比例','重置','固定支出高于收入，请检查数字。','固定支出','仅供参考，不构成财务建议。','语言','货币'],
+ja:['スマート資産・家計プランナー','収入を入力すると、賢いルールでお金を自動配分。自分好みに調整もできます。','月間手取り収入','固定の借入返済・税金・請求書','毎月必ず支払う義務','配分できる金額','あなたのスマートプラン','生活必需費・請求書','借入・税金の備え','緊急予備資金','投資・貯蓄','個人支出','配分をカスタマイズ','リセット','固定費が収入を上回っています。数値を確認してください。','固定費','参考情報であり、金融アドバイスではありません。','言語','通貨'],
+pt:['Planejador Inteligente de Patrimônio e Orçamento','Informe sua renda e deixe regras inteligentes dividirem seu dinheiro; depois ajuste do seu jeito.','Renda líquida mensal','Dívidas / impostos / contas fixas','Obrigações que você paga todo mês','Disponível para dividir','Seu plano inteligente','Necessidades e contas','Escudo de dívidas e impostos','Fundo de emergência','Investimentos e poupança','Gastos pessoais','Personalize a divisão','Redefinir','Os custos fixos superam sua renda. Revise os valores.','Custos fixos','Apenas orientação, não é aconselhamento financeiro.','Idioma','Moeda'],
+it:['Pianificatore Intelligente di Patrimonio e Budget','Inserisci il reddito e lascia che regole intelligenti dividano i tuoi soldi; poi personalizza.','Reddito netto mensile','Debiti / tasse / bollette fisse','Obblighi da pagare ogni mese','Da ripartire','Il tuo piano intelligente','Necessità e bollette','Scudo debiti e tasse','Fondo di emergenza','Investimenti e risparmio','Spese personali','Personalizza la ripartizione','Ripristina','I costi fissi superano il reddito. Controlla i numeri.','Costi fissi','Solo a scopo orientativo, non è consulenza finanziaria.','Lingua','Valuta'],
+hi:['स्मार्ट संपत्ति और बजट योजनाकार','अपनी आय दर्ज करें, स्मार्ट नियम आपके पैसे बाँटेंगे, फिर अपने हिसाब से बदलें।','मासिक शुद्ध आय','स्थायी कर्ज़ / कर / बिल','हर महीने चुकाने वाली अनिवार्य राशि','बाँटने के लिए शेष','आपकी स्मार्ट योजना','ज़रूरतें और बिल','कर्ज़ और कर सुरक्षा','आपातकालीन निधि','निवेश और बचत','निजी खर्च','बँटवारा अनुकूलित करें','रीसेट','स्थायी खर्च आपकी आय से अधिक हैं। आँकड़े जाँचें।','स्थायी खर्च','केवल मार्गदर्शन के लिए, वित्तीय सलाह नहीं।','भाषा','मुद्रा'],
+ko:['스마트 자산·예산 플래너','수입을 입력하면 똑똑한 규칙으로 돈을 나눠 드리고, 원하는 대로 조정할 수 있어요.','월 실수령 소득','고정 부채 / 세금 / 청구서','매달 꼭 내야 하는 금액','배분 가능 금액','나의 스마트 플랜','생활필수·청구서','부채·세금 방어','비상금','투자·저축','개인 지출','배분 비율 맞춤 설정','초기화','고정비가 소득보다 큽니다. 금액을 확인하세요.','고정비','참고용이며 금융 조언이 아닙니다.','언어','통화'],
+nl:['Slimme Vermogens- en Budgetplanner','Vul je inkomen in, slimme regels verdelen je geld; pas het daarna aan.','Netto maandinkomen','Vaste schulden / belasting / rekeningen','Verplichtingen die je elke maand betaalt','Te verdelen','Jouw slimme plan','Basisbehoeften & rekeningen','Schuld- & belastingschild','Noodfonds','Beleggen & sparen','Persoonlijke uitgaven','Verdeling aanpassen','Resetten','Vaste lasten zijn hoger dan je inkomen. Controleer je cijfers.','Vaste lasten','Alleen ter indicatie, geen financieel advies.','Taal','Valuta'],
+pl:['Inteligentny planer majątku i budżetu','Wpisz dochód, mądre zasady podzielą pieniądze, a potem dostosuj je po swojemu.','Miesięczny dochód netto','Stałe długi / podatki / rachunki','Zobowiązania płacone co miesiąc','Do rozdysponowania','Twój inteligentny plan','Potrzeby i rachunki','Tarcza długów i podatków','Fundusz awaryjny','Inwestycje i oszczędności','Wydatki osobiste','Dostosuj podział','Resetuj','Koszty stałe przekraczają dochód. Sprawdź liczby.','Koszty stałe','Tylko orientacyjnie, to nie porada finansowa.','Język','Waluta']
+};
+const CURRENCIES = [['USD','$ USD'],['EUR','€ EUR'],['GBP','£ GBP'],['TRY','₺ TRY'],['JPY','¥ JPY'],['CNY','¥ CNY'],['INR','₹ INR'],['RUB','₽ RUB'],['AED','د.إ AED'],['SAR','﷼ SAR'],['CAD','C$ CAD'],['AUD','A$ AUD'],['CHF','CHF'],['BRL','R$ BRL'],['KRW','₩ KRW'],['SEK','kr SEK'],['MXN','Mex$ MXN'],['SGD','S$ SGD'],['HKD','HK$ HKD'],['PLN','zł PLN']];
+const DEF_CUR = {en:'USD',tr:'TRY',es:'EUR',de:'EUR',fr:'EUR',ar:'AED',ru:'RUB',zh:'CNY',ja:'JPY',pt:'BRL',it:'EUR',hi:'INR',ko:'KRW',nl:'EUR',pl:'PLN'};
+const LOCALE = {zh:'zh-CN', pt:'pt-BR'};
+const COL = ['#3b82f6','#f43f5e','#f59e0b','#10b981','#8b5cf6'];
+const ICO = ['🏠','🛡️','🚨','📈','🎉'];
+const DEF = [45,10,10,20,15];
+
+function detect() {
+  const list = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || 'en'];
+  for (const l of list) { const c = String(l).toLowerCase().split('-')[0]; if (T[c]) return c; }
+  return 'en';
+}
+
+// Kayıtlı veriyi yükle
+let sv = null;
+try { sv = JSON.parse(localStorage.getItem(KEY)); } catch (e) {}
+const okPct = sv && Array.isArray(sv.pct) && sv.pct.length === 5 && sv.pct.every(n => typeof n === 'number' && n >= 0) && sv.pct.reduce((a, b) => a + b, 0) === 100;
+const S = {
+  lang: sv && T[sv.lang] ? sv.lang : detect(),
+  cur: sv && CURRENCIES.some(c => c[0] === sv.cur) ? sv.cur : null,
+  inc: sv && +sv.inc > 0 ? +sv.inc : 0,
+  fix: sv && +sv.fix > 0 ? +sv.fix : 0,
+  pct: okPct ? sv.pct.slice() : DEF.slice()
+};
+if (!S.cur) S.cur = DEF_CUR[S.lang] || 'USD';
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} };
+const t = i => T[S.lang][i];
+const loc = () => LOCALE[S.lang] || S.lang;
+
+function money(n) {
+  try { return new Intl.NumberFormat(loc(), {style:'currency', currency:S.cur, currencyDisplay:'narrowSymbol', maximumFractionDigits:0}).format(n); }
+  catch (e) { return Math.round(n) + ' ' + S.cur; }
+}
+function symbol() {
+  try { return new Intl.NumberFormat(loc(), {style:'currency', currency:S.cur, currencyDisplay:'narrowSymbol'}).formatToParts(0).find(p => p.type === 'currency').value; }
+  catch (e) { return S.cur; }
+}
+
+// Arayüz iskeleti (bir kez kurulur)
+$('curSel').innerHTML = CURRENCIES.map(([c, l]) => `<option value="${c}">${l}</option>`).join('');
+$('rows').innerHTML = COL.map((c, i) => `
+  <div class="rounded-2xl bg-white p-4 shadow-sm">
+    <div class="flex items-center justify-between gap-3">
+      <div class="flex min-w-0 items-center gap-3">
+        <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-2xl" style="background:${c}22">${ICO[i]}</span>
+        <div class="min-w-0"><p data-t="${7 + i}" class="font-bold leading-tight"></p><p class="text-sm text-slate-500"><span id="p${i}"></span>%</p></div>
+      </div>
+      <p id="a${i}" class="text-lg font-extrabold sm:text-xl"></p>
+    </div>
+    <div class="mt-3 h-3 w-full overflow-hidden rounded-full bg-slate-100" dir="ltr"><div id="b${i}" class="seg h-full rounded-full" style="background:${c}"></div></div>
+    <input id="s${i}" type="range" min="0" max="100" step="1" class="cust mt-3 hidden w-full" style="accent-color:${c}">
+  </div>`).join('');
+$('stack').innerHTML = ['#94a3b8', ...COL].map((c, i) => `<div id="g${i}" class="seg h-full" style="background:${c};width:0"></div>`).join('');
+$('legend').innerHTML = ['#94a3b8', ...COL].map((c, i) =>
+  `<span class="flex items-center gap-1.5"><i class="inline-block h-2.5 w-2.5 rounded-full" style="background:${c}"></i><span data-t="${i === 0 ? 15 : 6 + i}"></span>${i === 0 ? ' <b id="fixPct"></b>' : ''}</span>`).join('');
+
+function update() {
+  const inc = S.inc;
+  const rem = Math.max(0, inc - S.fix);
+  $('warn').classList.toggle('hidden', !(inc > 0 && S.fix > inc));
+  $('left').textContent = money(rem);
+  const fixShare = inc > 0 ? Math.min(100, S.fix / inc * 100) : 0;
+  $('fixPct').textContent = '· ' + Math.round(fixShare) + '%';
+  $('g0').style.width = fixShare + '%';
+  S.pct.forEach((p, i) => {
+    $('p' + i).textContent = p;
+    $('a' + i).textContent = money(rem * p / 100);
+    $('b' + i).style.width = p + '%';
+    $('s' + i).value = p;
+    $('g' + (i + 1)).style.width = ((100 - fixShare) * p / 100) + '%';
+  });
+  save();
+}
+
+function rebalance(i, v) {
+  v = Math.max(0, Math.min(100, Math.round(v)));
+  const idx = [0, 1, 2, 3, 4].filter(k => k !== i);
+  const rest = 100 - v, sum = idx.reduce((a, k) => a + S.pct[k], 0);
+  const out = S.pct.slice(); out[i] = v;
+  if (sum === 0) idx.forEach(k => out[k] = Math.floor(rest / idx.length));
+  else idx.forEach(k => out[k] = Math.floor(S.pct[k] * rest / sum));
+  const diff = rest - idx.reduce((a, k) => a + out[k], 0);
+  const big = idx.reduce((m, k) => out[k] >= out[m] ? k : m, idx[0]);
+  out[big] += diff;
+  S.pct = out;
+}
+
+[0, 1, 2, 3, 4].forEach(i => $('s' + i).addEventListener('input', e => { rebalance(i, +e.target.value); update(); }));
+$('inc').addEventListener('input', e => { S.inc = Math.max(0, parseFloat(e.target.value) || 0); update(); });
+$('fix').addEventListener('input', e => { S.fix = Math.max(0, parseFloat(e.target.value) || 0); update(); });
+$('resetBtn').addEventListener('click', () => { S.pct = DEF.slice(); update(); });
+$('custBtn').addEventListener('click', e => {
+  const show = e.currentTarget.getAttribute('aria-expanded') !== 'true';
+  e.currentTarget.setAttribute('aria-expanded', show);
+  document.querySelectorAll('.cust').forEach(s => s.classList.toggle('hidden', !show));
+});
+
+function apply() {
+  document.documentElement.lang = S.lang;
+  document.documentElement.dir = S.lang === 'ar' ? 'rtl' : 'ltr';
+  document.title = t(0);
+  document.querySelectorAll('[data-t]').forEach(el => el.textContent = t(+el.dataset.t));
+  document.querySelectorAll('.cs').forEach(el => el.textContent = symbol());
+  $('langSel').setAttribute('aria-label', t(17)); $('langSel').title = t(17);
+  $('curSel').setAttribute('aria-label', t(18)); $('curSel').title = t(18);
+  update();
+}
+$('langSel').addEventListener('change', e => { S.lang = e.target.value; apply(); });
+$('curSel').addEventListener('change', e => { S.cur = e.target.value; apply(); });
+
+$('langSel').value = S.lang;
+$('curSel').value = S.cur;
+if (S.inc) $('inc').value = S.inc;
+if (S.fix) $('fix').value = S.fix;
+apply();
+</script>
+</body>
+</html>
